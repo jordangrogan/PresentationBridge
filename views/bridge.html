@@ -878,7 +878,7 @@ function ConnectToProPresenter()
 
 function setupRemoteSocket()
 {
-    webSocketRemote = $.simpleWebSocket({ url: 'wss://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote' });
+    webSocketRemote = $.simpleWebSocket({ url: 'ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote' });
 
     webSocketRemote.send({"action":"authenticate","protocol":"600","password":config['propresenter_password']}).done(function() {
     }).fail(function(e) {
@@ -1228,7 +1228,7 @@ function updateDiv_PresentationItems(presentationLocation)
 function setupStageDisplaySocket()
 {
     //Connect to ProPresenter Remote Stage Display
-    webSocketStageDisplay = $.simpleWebSocket({ url: 'wss://'+config['propresenter_ip']+':'+config['propresenter_port']+'/stagedisplay' });
+    webSocketStageDisplay = $.simpleWebSocket({ url: 'ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/stagedisplay' });
 
     webSocketStageDisplay.send({"pwd":config['propresenter_password'],"ptl":610,"acn":"ath"}).done(function() {
 
