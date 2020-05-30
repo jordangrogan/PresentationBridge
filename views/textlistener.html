@@ -86,7 +86,7 @@
             max-height: 100vh;
             margin: auto;
         }
-        
+
         #divWaiting
         {
             animation: waiting-blink 1.5s ease infinite alternate;
@@ -107,9 +107,9 @@
             max-width:100%;
             max-height:100%;
         }
-        
+
         @keyframes waiting-blink
-        { 
+        {
             50%
             {
                 color: #ff0000;
@@ -161,7 +161,7 @@
                         break;
                 }
             });
-            
+
             socket.on("bridgeinuse", function(value) {
                 if (value)
                 {
@@ -173,7 +173,7 @@
                     //show the "waiting" div
                     document.getElementById("divWaiting").style.display = "block";
                     GoToLogo(true);
-                } 
+                }
             });
 
             socket.on('announcement', function(text){
@@ -205,7 +205,7 @@
             });
 
             socket.on("redirect", function(url) {
-               window.location.href = url; 
+               window.location.href = url;
             });
 
             socket.on("reload", function(value) {
@@ -265,10 +265,10 @@
             selBridgeList.options.length = 0;
 
             if (Bridges.length > 1)
-            {  
+            {
                 let default_opt = document.createElement("option");
                 default_opt.value = "0";
-                default_opt.text = "(select a Bridge)";
+                default_opt.text = "Select a Location";
                 selBridgeList.appendChild(default_opt);
                 for (let i = 0; i < Bridges.length; i++)
                 {
@@ -332,7 +332,7 @@
                 {
                     document.body.style.color = Bridges[i].foregroundColor;
                     document.body.style.background = Bridges[i].backgroundColor;
-                    document.body.style.fontFamily = Bridges[i].font;       
+                    document.body.style.fontFamily = Bridges[i].font;
                     break;
                 }
             }
@@ -365,7 +365,7 @@
                 {
                     let imgObj = document.createElement("img");
                     imgObj.src = imgData;
-                    imgObj.className = "imgLogo";            
+                    imgObj.className = "imgLogo";
                     setTimeout(function() {
                         document.getElementById("divLogo").innerHTML = "";
                         document.getElementById("divLogo").appendChild(imgObj);
@@ -416,7 +416,7 @@
             <div id="divLogo"></div>
             <div id="divSelectBridge">
                 <div id="divBridgeLogo">
-                    <img id="imgBridgeLogo" src="images/logo_dark.png" alt="Presentation Bridge"/><br />
+                    <img id="imgBridgeLogo" src="images/xr_logo_dark.png" alt="Crossroads Slides"/><br />
                 </div>
                 <select id="selBridgeList">
                 </select>
@@ -426,7 +426,7 @@
                     <button id="btnLogin">Login</button>
                 </div>
             </div>
-            <div id="divWaiting">WAITING FOR<br />BRIDGE TO CONNECT...</div>
+            <div id="divWaiting">WAITING TO<br /> CONNECT...</div>
             <div id="announcement"></div>
             <div id="current_slide"></div>
         </div>
