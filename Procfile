@@ -1,1 +1,1 @@
-web: node main.js 3000
+web: node main.js $PORT
