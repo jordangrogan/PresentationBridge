@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -7,7 +7,7 @@
 /*
  * TO DO:
  * needs to accept a app id and secret key
- * 
+ *
  */
 
 const express = require('express');
@@ -91,11 +91,11 @@ app.use(express.static('views/static'));
 
 io.sockets.on("connection", function(socket) {
     // CONFIG SOCKETS //
-    
+
     socket.on("config_bridgeroom_getall", function() {
         io.to("Config").emit("config_bridgerooms", Bridges);
     });
-    
+
     socket.on("config_bridgeroom_add", function (bridgeRoomObj) {
         if (bridgeRoomObj.logo === "")
         {
@@ -107,7 +107,7 @@ io.sockets.on("connection", function(socket) {
         io.to("BridgeRooms").emit("bridgerooms", Bridges);
         saveFile();
     });
-    
+
     socket.on("config_bridgeroom_update", function (bridgeRoomObj) {
         let index = null;
         for (let i = 0; i < Bridges.length; i++)
@@ -131,7 +131,7 @@ io.sockets.on("connection", function(socket) {
             io.to("Config").emit("config_status", "update-failure");
         }
     });
-    
+
     socket.on("config_bridgeroom_delete", function (bridgeRoomObj) {
         let index = null;
         for (let i = 0; i < Bridges.length; i++)
@@ -154,7 +154,7 @@ io.sockets.on("connection", function(socket) {
             io.to("Config").emit("config_status", "delete-failure");
         }
     });
-    
+
     socket.on("config_changepassword", function(oldPassword, newPassword) {
         if (oldPassword === ConfigPassword)
         {
@@ -167,15 +167,15 @@ io.sockets.on("connection", function(socket) {
             socket.emit("config_status", "changepassword-failure");
         }
     });
-    
+
     // BRIDGE ROOM SOCKETS
-    
+
     // Return all bridges in the array
     socket.on("bridgerooms_getall", function () {
         let bridgeArray = GetCleanBridgeArray();
-       socket.emit("bridgerooms", bridgeArray); 
+       socket.emit("bridgerooms", bridgeArray);
     });
-    
+
     socket.on("bridgerooms_authenticate", function(bridgeID, password) {
         if (GetBridgeInUse(bridgeID))
         {
@@ -212,14 +212,14 @@ io.sockets.on("connection", function(socket) {
             }
         }
     });
-    
+
     socket.on("bridgerooms_disconnect", function(bridgeID) {
        SetBridgeInUse(bridgeID, false);
        SetLogoMode(bridgeID, true);
     });
-    
+
     // LISTENER SOCKETS
-    
+
     socket.on("textlistener_joinbridgeroom", function(bridgeID, password) {
         for (let i = 0; i < Bridges.length; i++)
         {
@@ -241,7 +241,7 @@ io.sockets.on("connection", function(socket) {
             }
         }
     });
-    
+
     socket.on("listener_get_current_slide", function(bridgeID) {
        for (let i = 0; i < Bridges.length; i++)
        {
@@ -252,7 +252,7 @@ io.sockets.on("connection", function(socket) {
            }
        }
     });
-    
+
     socket.on("listener_get_current_slide_notes", function(bridgeID) {
        for (let i = 0; i < Bridges.length; i++)
        {
@@ -263,7 +263,7 @@ io.sockets.on("connection", function(socket) {
            }
        }
     });
-    
+
     socket.on("listener_get_next_slide", function(bridgeID) {
        for (let i = 0; i < Bridges.length; i++)
        {
@@ -274,7 +274,7 @@ io.sockets.on("connection", function(socket) {
            }
        }
     });
-    
+
     socket.on("listener_get_next_slide_notes", function(bridgeID) {
        for (let i = 0; i < Bridges.length; i++)
        {
@@ -285,7 +285,7 @@ io.sockets.on("connection", function(socket) {
            }
        }
     });
-    
+
     socket.on("listener_get_current_slide_image", function(bridgeID) {
        for (let i = 0; i < Bridges.length; i++)
        {
@@ -296,7 +296,7 @@ io.sockets.on("connection", function(socket) {
            }
        }
     });
-    
+
     socket.on("listener_get_next_slide_image", function(bridgeID) {
        for (let i = 0; i < Bridges.length; i++)
        {
@@ -307,8 +307,8 @@ io.sockets.on("connection", function(socket) {
            }
        }
     });
-    
-    socket.on("imagelistener_joinbridgeroom", function(bridgeID, password) {   
+
+    socket.on("imagelistener_joinbridgeroom", function(bridgeID, password) {
         for (let i = 0; i < Bridges.length; i++)
         {
             if (Bridges[i].id === bridgeID)
@@ -329,11 +329,11 @@ io.sockets.on("connection", function(socket) {
             }
         }
     });
-    
+
     socket.on("stagedisplaylistener_getbridges", function () {
-       socket.emit("bridgerooms", GetStageDisplayBridges()); 
+       socket.emit("bridgerooms", GetStageDisplayBridges());
     });
-    
+
     socket.on("stagedisplaylistener_joinbridgeroom", function(bridgeID, password) {
         for (let i = 0; i < Bridges.length; i++)
         {
@@ -355,10 +355,10 @@ io.sockets.on("connection", function(socket) {
             }
         }
     });
-    
+
     //OTHER SOCKETS
-    
-    socket.on("room", function(room) {       
+
+    socket.on("room", function(room) {
         switch(room)
         {
             case "TextListeners":
@@ -385,61 +385,61 @@ io.sockets.on("connection", function(socket) {
                 break;
         }
     });
-       
+
     socket.on("announcement", function(bridgeID, text) {
        updateBridgeText(bridgeID, "announcement", text);
        updateBridgeImage(bridgeID, "announcement", text);
        console.log("sending announcement to: " + bridgeID, text);
     });
-    
+
     socket.on("redirect", function(bridgeID, url) {
        updateBridgeText(bridgeID, "redirect", url);
        updateBridgeImage(bridgeID, "redirect", url);
        console.log("redirecting to: ", url);
     });
-    
+
     socket.on("gotologo", function (bridgeID, value) {
         SetLogoMode(bridgeID, value);
        updateBridgeText(bridgeID, "gotologo", value);
        updateBridgeImage(bridgeID, "gotologo", value);
        console.log("Going to logo: " + value);
     });
-    
+
     socket.on("keepawake", function (bridgeID, value) {
        updateBridgeText(bridgeID, "keepawake", value);
        updateBridgeImage(bridgeID, "keepawake", value);
        console.log("Keep Awake: " + value);
     });
-    
+
     socket.on("reload", function(bridgeID, value) {
        updateBridgeText(bridgeID, "reload", value);
        updateBridgeImage(bridgeID, "reload", value);
        console.log("reloading page: ", value);
     });
-    
+
     socket.on("current_slide", function(bridgeID, text) {
        updateBridgeText(bridgeID, "current_slide", text);
     });
-    
+
     socket.on("current_slide_notes", function(bridgeID, text) {
        updateBridgeText(bridgeID, "current_slide_notes", text);
     });
-    
+
     socket.on("next_slide", function(bridgeID, text) {
         updateBridgeText(bridgeID, "next_slide", text);
     });
-    
+
     socket.on("next_slide_notes", function(bridgeID, text) {
        updateBridgeText(bridgeID, "next_slide_notes", text);
     });
-    
+
     socket.on("current_slide_image", function(bridgeID, imgData) {
         updateBridgeImage(bridgeID, "current_slide_image", imgData);
     });
-    
+
     socket.on("disconnect", function(){
         RemoveClient(socket);
-        
+
         io.to("Bridge").emit("client_disconnected", Clients);
     });
 });
@@ -463,7 +463,7 @@ function SetBridgeInUse(bridgeID, value)
 function GetBridgeInUse(bridgeID)
 {
     let bridgeObj = Bridges.find(function (obj) { return obj.id.toString() === bridgeID; });
-    
+
     return bridgeObj.inUse;
 }
 
@@ -471,14 +471,14 @@ function AddClient(socket, bridgeID, type)
 {
     let clientObj = {};
     console.log("*** NEW CLIENT ***");
-    
+
     clientObj.socketID = socket.id; //first position is always the socket ID
     clientObj.bridgeID = bridgeID;
     clientObj.issued = socket.handshake.issued;
     clientObj.address = socket.handshake.address;
-    
+
     clientObj.roomType = type;
-    
+
     Clients.push(clientObj);
     console.log(clientObj);
     io.to("BridgeRoom-" + bridgeID).emit("client_connected", clientObj);
@@ -488,30 +488,30 @@ function RemoveClient(socket)
 {
     console.log("Removing a Client.");
     //console.log(socket);
-    
+
     let socketID = socket.id;
     let index = null;
-    
+
     let bridgeID = null;
-    
+
     for (let i = 0; i < Clients.length; i++)
     {
         if (Clients[i].socketID === socketID)
         {
             index = i;
             bridgeID = Clients[i].bridgeID;
-            
+
             console.log("Room Type: " + Clients[i].roomType);
-            
+
             if (Clients[i].roomType === "Bridge")
             {
                 SetBridgeInUse(bridgeID, false);
             }
-            
+
             break;
         }
     }
-    
+
     if (index !== null)
     {
         Clients.splice(index, 1);
@@ -535,7 +535,7 @@ function SetLogoMode(bridgeID, value)
 function GetLogoMode(bridgeID)
 {
     let logoMode = false;
-    
+
     for (let i = 0; i < Bridges.length; i++)
     {
         if (Bridges[i].id === bridgeID)
@@ -545,7 +545,7 @@ function GetLogoMode(bridgeID)
             break;
         }
     }
-    
+
     console.log("Logo mode is: " + logoMode);
     return logoMode;
 }
@@ -579,18 +579,18 @@ function updateBridgeImage(bridgeID, mode, imgData) //sends the latest image dat
 }
 
 function loadFile() //loads settings on first load of app
-{   
+{
     try
     {
-        let rawdata = fs.readFileSync(JSONdatafile); 
-        let myJson = JSON.parse(rawdata); 
+        let rawdata = fs.readFileSync(JSONdatafile);
+        let myJson = JSON.parse(rawdata);
 
         Bridges = myJson.Bridges;
         ConfigPassword = myJson.ConfigPassword;
     }
     catch (error)
     {
-        
+
     }
 }
 
@@ -603,7 +603,7 @@ function saveFile() //saves settings to a local storage file for later recalling
 
     fs.writeFileSync(JSONdatafile, JSON.stringify(myJson), "utf8", function(error) {
         if (error)
-        { 
+        {
           console.log('error: ' + error);
         }
         else
@@ -616,7 +616,7 @@ function saveFile() //saves settings to a local storage file for later recalling
 function GetBridge(bridgeID)
 {
     let bridgeObj = null;
-    
+
     for (let i = 0; i < Bridges.length; i++)
     {
         if (Bridges[i].id === bridgeID)
@@ -624,14 +624,14 @@ function GetBridge(bridgeID)
             bridgeObj = Bridges[i];
         }
     }
-    
+
     return bridgeObj;
 }
 
 function GetCleanBridgeArray() // builds an array of current Bridges but only with the ID and Name, so no passwords are sent unncessarily
 {
     let bridgeArray = [];
-    
+
     for (let i = 0; i < Bridges.length; i++)
     {
         if (Bridges[i].enabled)
@@ -651,14 +651,14 @@ function GetCleanBridgeArray() // builds an array of current Bridges but only wi
             bridgeArray.push(bridgeObj);
         }
     }
-    
+
     return bridgeArray;
 }
 
 function GetTextBridges() // builds an array of bridges that are allowed to have Text listeners
 {
     let bridgeArray = [];
-    
+
     for (let i = 0; i < Bridges.length; i++)
     {
         if (Bridges[i].allowText)
@@ -682,14 +682,14 @@ function GetTextBridges() // builds an array of bridges that are allowed to have
             bridgeArray.push(bridgeObj);
         }
     }
-    
+
     return bridgeArray;
 }
 
 function GetImageBridges() // builds an array of bridges that are allowed to have Image listeners
 {
     let bridgeArray = [];
-    
+
     for (let i = 0; i < Bridges.length; i++)
     {
         if (Bridges[i].allowImage)
@@ -710,14 +710,14 @@ function GetImageBridges() // builds an array of bridges that are allowed to hav
             bridgeArray.push(bridgeObj);
         }
     }
-    
+
     return bridgeArray;
 }
 
 function GetStageDisplayBridges() // builds an array of bridges that are allowed to have Stage Display listeners
 {
     let bridgeArray = [];
-    
+
     for (let i = 0; i < Bridges.length; i++)
     {
         if (Bridges[i].allowStageDisplay)
@@ -737,23 +737,23 @@ function GetStageDisplayBridges() // builds an array of bridges that are allowed
             bridgeArray.push(bridgeObj);
         }
     }
-    
+
     return bridgeArray;
 }
 
-let listenPort = defaultListenPort;
+let listenPort = process.env.PORT || 5000;
 
-let cli_listenPort = process.argv[2];
-
-if (parseInt(cli_listenPort) !== 'NaN')
-{
-    intPort = parseInt(cli_listenPort);
-    
-    if ((intPort > 1024) && (intPort <= 65535))
-    {
-        listenPort = intPort;
-    }
-}
+// let cli_listenPort = process.argv[2];
+//
+// if (parseInt(cli_listenPort) !== 'NaN')
+// {
+//     intPort = parseInt(cli_listenPort);
+//
+//     if ((intPort > 1024) && (intPort <= 65535))
+//     {
+//         listenPort = intPort;
+//     }
+// }
 
 http.listen(listenPort, function () {
     console.log("listening on *:" + listenPort);
