@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>Presentation Bridge</title>
+        <title>Crossroads Slides</title>
         <style>
         *
         {
@@ -9,7 +9,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body
         {
             font: 90px Helvetica, Arial;
@@ -23,8 +23,8 @@
             width: 90%;
             height: 90%;
         }
-      
-        #current_slide_image 
+
+        #current_slide_image
         {
             display: flex;
             justify-content: center;
@@ -33,14 +33,14 @@
             width: 100%;
             height: 100%;
         }
-      
+
         .img_current
         {
             flex-shrink: 0;
             min-width: 100%;
             min-height: 100%
         }
-      
+
         #divSelectBridge
         {
             display: none;
@@ -95,7 +95,7 @@
             max-height: 100vh;
             margin: auto;
         }
-        
+
         #divWaiting
         {
             animation: waiting-blink 1.5s ease infinite alternate;
@@ -115,9 +115,9 @@
             max-width:100%;
             max-height:100%;
         }
-        
+
         @keyframes waiting-blink
-        { 
+        {
             50%
             {
                 color: #ff0000;
@@ -140,19 +140,19 @@ function onLoad()
     document.getElementById("btnLogin").addEventListener("click", function (e) {
         loginBridge(selectedBridgeID, document.getElementById("txtObservePassword").value);
     });
-    
+
     socket = io.connect();
 
     socket.on('connect', function() {
        // Connected, let's sign-up for to receive messages for this room
        socket.emit('room', "ImageListeners");
     });
-    
+
     socket.on("bridgerooms", function(bridgeArray) {
         Bridges = bridgeArray;
         updateBridgeList();
     });
-    
+
     socket.on("status", function(status) {
         switch(status)
         {
@@ -169,7 +169,7 @@ function onLoad()
                 break;
         }
     });
-    
+
     socket.on("bridgeinuse", function(value) {
                 if (value)
                 {
@@ -181,12 +181,12 @@ function onLoad()
                     //show the "waiting" div
                     document.getElementById("divWaiting").style.display = "block";
                     GoToLogo(true);
-                } 
+                }
     });
-    
+
     socket.on('announcement', function(text){
         let announcement = document.getElementById("announcement");
-        
+
         if (text !== null)
         {
             if (text === "")
@@ -211,21 +211,21 @@ function onLoad()
             }
         }
     });
-    
+
     socket.on("redirect", function(url) {
-       window.location.href = url; 
+       window.location.href = url;
     });
-    
+
     socket.on("reload", function(value) {
         if (value)
         {
             window.location.reload(true);
         }
     });
-    
-    socket.on('current_slide_image', function(imgData){        
+
+    socket.on('current_slide_image', function(imgData){
         let currentSlideImage = document.getElementById("current_slide_image");
-        
+
         if ((imgData !== "clear")&&(imgData !== null))
         {
             if (currentSlideImage.innerHTML === "")
@@ -258,18 +258,18 @@ function onLoad()
             currentSlideImage.style.opacity = "0";
         }
     });
-    
+
     socket.on("gotologo", function(value) {
        GoToLogo(value);
     });
-    
+
     socket.on("keepawake", function(value) {
        KeepScreenAwake(value);
     });
-    
+
     document.addEventListener('click', enableNoSleep, false);
 }
-    
+
 String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.split(search).join(replacement);
@@ -279,9 +279,9 @@ function updateBridgeList()
 {
     var selBridgeList = document.getElementById("selBridgeList");
     selBridgeList.options.length = 0;
-    
+
     if (Bridges.length > 1)
-    {  
+    {
         let default_opt = document.createElement("option");
         default_opt.value = "0";
         default_opt.text = "(select a Bridge)";
@@ -343,7 +343,7 @@ function loginBridge(bridgeID, password)
 function getBridge(bridgeID)
 {
     let bridgeObj = null;
-    
+
     for (let i = 0; i < Bridges.length; i++)
     {
         if (Bridges[i].id === bridgeID)
@@ -351,7 +351,7 @@ function getBridge(bridgeID)
             bridgeObj = Bridges[i];
         }
     }
-    
+
     return bridgeObj;
 }
 
@@ -367,7 +367,7 @@ function GoToLogo(value)
         {
             let imgObj = document.createElement("img");
             imgObj.src = imgData;
-            imgObj.className = "imgLogo";        
+            imgObj.className = "imgLogo";
             setTimeout(function() {
                 document.getElementById("current_slide_image").style.display = "none";
                 document.getElementById("divLogo").innerHTML = "";
@@ -394,9 +394,9 @@ function GoToLogo(value)
 function KeepScreenAwake(value)
 {
     //keeps the phone screen on if true by using the NoSleep library - playing a dummy video in the background
-    
+
     KeepAwake = value;
-    
+
     if (!value)
     {
         noSleep.disable();
