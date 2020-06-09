@@ -787,6 +787,4 @@ function defaultBridges() {
     bridgeObj.foregroundColor = "#FFFFFF";
     bridgeObj.backgroundColor = "#000000";
     bridgeObj.font = "";
-
-    socket.emit("config_bridgeroom_add", bridgeObj); // send it to the server
-}
+  }
