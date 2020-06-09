@@ -787,4 +787,6 @@ function defaultBridges() {
     bridgeObj.foregroundColor = "#FFFFFF";
     bridgeObj.backgroundColor = "#000000";
     bridgeObj.font = "";
+
+    Bridges.push(bridgeObj);
   }
