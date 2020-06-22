@@ -805,7 +805,7 @@ function defaultBridges() {
     Bridges.push(cbBridge);
 
     let elBridge = {};
-    elBridge.id = = "CROSSRDEL";
+    elBridge.id = "CROSSRDEL";
     elBridge.name = "East Liberty";
     elBridge.controlPassword = "xr1991";
     elBridge.observePassword = "";
@@ -820,7 +820,7 @@ function defaultBridges() {
     Bridges.push(elBridge);
 
     let nfBridge = {};
-    nfBridge.id = = "CROSSRDNF";
+    nfBridge.id = "CROSSRDNF";
     nfBridge.name = "North Fayette";
     nfBridge.controlPassword = "xr1991";
     nfBridge.observePassword = "";
@@ -835,7 +835,7 @@ function defaultBridges() {
     Bridges.push(nfBridge);
 
     let wtBridge = {};
-    wtBridge.id = = "CROSSRDWT";
+    wtBridge.id = "CROSSRDWT";
     wtBridge.name = "Weirton";
     wtBridge.controlPassword = "xr1991";
     wtBridge.observePassword = "";
